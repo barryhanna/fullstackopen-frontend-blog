@@ -7,10 +7,7 @@ const login = async (credentials) => {
 	return response.data;
 };
 
-const setToken = () => {};
-
 // eslint-disable-next-line
 export default {
 	login,
-	setToken,
 };

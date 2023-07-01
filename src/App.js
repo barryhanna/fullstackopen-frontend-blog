@@ -14,10 +14,21 @@ const App = () => {
 		blogService.getAll().then((blogs) => setBlogs(blogs));
 	}, []);
 
-	const handleSubmit = async (e) => {
+	useEffect(() => {
+		const loggedInBlogUserJSON = localStorage.getItem(
+			'loggedInBlogUser'
+		);
+		if (loggedInBlogUserJSON) {
+			setUser(JSON.parse(loggedInBlogUserJSON));
+		}
+	}, []);
+
+	const handleLogin = async (e) => {
 		e.preventDefault();
 		try {
 			const user = await loginService.login({ username, password });
+			localStorage.setItem('loggedInBlogUser', JSON.stringify(user));
+			blogService.setToken(user.token);
 			setUser(user);
 			setUsername('');
 			setPassword('');
@@ -34,13 +45,20 @@ const App = () => {
 					setUsername={setUsername}
 					password={password}
 					setPassword={setPassword}
-					handleSubmit={handleSubmit}
+					handleSubmit={handleLogin}
 				/>
 			)}
 			{user && (
 				<p>
 					{user.username} is logged in.{' '}
-					<button onClick={() => setUser(null)}>Logout</button>
+					<button
+						onClick={() => {
+							setUser(null);
+							localStorage.removeItem('loggedInBlogUser');
+						}}
+					>
+						Logout
+					</button>
 				</p>
 			)}
 			{user && (
