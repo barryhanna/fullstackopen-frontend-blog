@@ -3,6 +3,7 @@ import Blog from './components/Blog';
 import blogService from './services/blogs';
 import LoginForm from './components/LoginForm';
 import loginService from './services/login';
+import BlogForm from './components/BlogForm';
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
@@ -10,9 +11,19 @@ const App = () => {
 	const [password, setPassword] = useState('');
 	const [user, setUser] = useState(null);
 
+	const [blog, setBlog] = useState({
+		title: '',
+		author: '',
+		url: '',
+	});
+
 	useEffect(() => {
 		blogService.getAll().then((blogs) => setBlogs(blogs));
 	}, []);
+
+	useEffect(() => {
+		blogService.create(blogs[blogs.length - 1]);
+	}, [blogs]);
 
 	useEffect(() => {
 		const loggedInBlogUserJSON = localStorage.getItem(
@@ -60,6 +71,9 @@ const App = () => {
 						Logout
 					</button>
 				</p>
+			)}
+			{user && (
+				<BlogForm blog={blog} setBlog={setBlog} setBlogs={setBlogs} />
 			)}
 			{user && (
 				<>
