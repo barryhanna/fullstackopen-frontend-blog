@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createRef } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import LoginForm from './components/LoginForm';
 import loginService from './services/login';
 import BlogForm from './components/BlogForm';
+import Togglable from './components/Togglable';
 
 const notificationTypes = {
 	error: 'error',
@@ -19,6 +20,8 @@ const App = () => {
 	const [password, setPassword] = useState('');
 	const [user, setUser] = useState(null);
 
+	const newBlogFormRef = createRef();
+
 	const [blog, setBlog] = useState({
 		title: '',
 		author: '',
@@ -33,6 +36,7 @@ const App = () => {
 			notificationTypes.success,
 			`'${blog.title}' by '${blog.author}' added.`
 		);
+		newBlogFormRef.current.toggleVisibility();
 	};
 
 	const displayNotification = (type, message) => {
@@ -88,13 +92,15 @@ const App = () => {
 				</p>
 			)}
 			{!user && (
-				<LoginForm
-					username={username}
-					setUsername={setUsername}
-					password={password}
-					setPassword={setPassword}
-					handleSubmit={handleLogin}
-				/>
+				<Togglable buttonText="Login">
+					<LoginForm
+						username={username}
+						setUsername={setUsername}
+						password={password}
+						setPassword={setPassword}
+						handleSubmit={handleLogin}
+					/>
+				</Togglable>
 			)}
 			{user && (
 				<p>
@@ -110,7 +116,9 @@ const App = () => {
 				</p>
 			)}
 			{user && (
-				<BlogForm blog={blog} setBlog={setBlog} addBlog={addBlog} />
+				<Togglable buttonText="Add New Blog" ref={newBlogFormRef}>
+					<BlogForm blog={blog} setBlog={setBlog} addBlog={addBlog} />
+				</Togglable>
 			)}
 			{user && (
 				<>
