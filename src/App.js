@@ -5,7 +5,15 @@ import LoginForm from './components/LoginForm';
 import loginService from './services/login';
 import BlogForm from './components/BlogForm';
 
+const notificationTypes = {
+	error: 'error',
+	success: 'success',
+	info: 'info',
+	warning: 'warning',
+};
+
 const App = () => {
+	const [notification, setNotification] = useState({});
 	const [blogs, setBlogs] = useState([]);
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -17,13 +25,29 @@ const App = () => {
 		url: '',
 	});
 
+	const addBlog = (blog) => {
+		setBlog(blog);
+		setBlogs([...blogs, blog]);
+		blogService.create(blog);
+		displayNotification(
+			notificationTypes.success,
+			`'${blog.title}' by '${blog.author}' added.`
+		);
+	};
+
+	const displayNotification = (type, message) => {
+		setNotification({
+			type,
+			message,
+		});
+		setTimeout(() => {
+			setNotification({});
+		}, 5000);
+	};
+
 	useEffect(() => {
 		blogService.getAll().then((blogs) => setBlogs(blogs));
 	}, []);
-
-	useEffect(() => {
-		blogService.create(blogs[blogs.length - 1]);
-	}, [blogs]);
 
 	useEffect(() => {
 		const loggedInBlogUserJSON = localStorage.getItem(
@@ -43,13 +67,26 @@ const App = () => {
 			setUser(user);
 			setUsername('');
 			setPassword('');
+			displayNotification({
+				type: notificationTypes.success,
+				message: 'Successfully logged in',
+			});
 		} catch (err) {
-			console.log('Wrong credentials');
+			displayNotification(
+				notificationTypes.error,
+				'Wrong username or password'
+			);
 		}
 	};
 
 	return (
 		<div>
+			{notification.message && (
+				<p className={`notification ${notification.type}`}>
+					<span>{notification.type}</span>:{' '}
+					<span>{notification.message}</span>
+				</p>
+			)}
 			{!user && (
 				<LoginForm
 					username={username}
@@ -73,7 +110,7 @@ const App = () => {
 				</p>
 			)}
 			{user && (
-				<BlogForm blog={blog} setBlog={setBlog} setBlogs={setBlogs} />
+				<BlogForm blog={blog} setBlog={setBlog} addBlog={addBlog} />
 			)}
 			{user && (
 				<>

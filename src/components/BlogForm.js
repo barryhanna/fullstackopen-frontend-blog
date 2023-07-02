@@ -1,19 +1,25 @@
 import { useState } from 'react';
 
-const BlogForm = ({ blog, setBlog, setBlogs }) => {
-	const [title, setTitle] = useState(blog.title || '');
-	const [author, setAuthor] = useState(blog.author || '');
-	const [url, setUrl] = useState(blog.url || '');
+const BlogForm = ({ addBlog }) => {
+	const [title, setTitle] = useState('');
+	const [author, setAuthor] = useState('');
+	const [url, setUrl] = useState('');
+
+	const clearForm = () => {
+		setTitle('');
+		setAuthor('');
+		setUrl('');
+	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const newBlog = { title, author, url };
-		setBlog(newBlog);
-		setBlogs((prevBlogs) => [...prevBlogs, newBlog]);
+		addBlog(newBlog);
+		clearForm();
 	};
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<form className="blogForm" onSubmit={handleSubmit}>
 			<label htmlFor="title">title:</label>
 			<input
 				id="title"
@@ -21,6 +27,7 @@ const BlogForm = ({ blog, setBlog, setBlogs }) => {
 				name="title"
 				required
 				onChange={(e) => setTitle(e.target.value)}
+				value={title}
 			/>
 			<label htmlFor="">author:</label>
 			<input
@@ -29,6 +36,7 @@ const BlogForm = ({ blog, setBlog, setBlogs }) => {
 				name="author"
 				required
 				onChange={(e) => setAuthor(e.target.value)}
+				value={author}
 			/>
 			<label htmlFor="url">url:</label>
 			<input
@@ -36,6 +44,7 @@ const BlogForm = ({ blog, setBlog, setBlogs }) => {
 				type="url"
 				name="url"
 				onChange={(e) => setUrl(e.target.value)}
+				value={url}
 			/>
 			<button>Create</button>
 		</form>
