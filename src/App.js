@@ -16,8 +16,7 @@ const notificationTypes = {
 const App = () => {
 	const [notification, setNotification] = useState({});
 	const [blogs, setBlogs] = useState([]);
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
+
 	const [user, setUser] = useState(null);
 
 	const newBlogFormRef = createRef();
@@ -28,10 +27,12 @@ const App = () => {
 		url: '',
 	});
 
-	const addBlog = (blog) => {
+	const addBlog = async (blog) => {
 		setBlog(blog);
+		blogService.setToken(user.token);
+		const newBlog = await blogService.create(blog);
+		blog.id = newBlog.id;
 		setBlogs([...blogs, blog]);
-		blogService.create(blog);
 		displayNotification(
 			notificationTypes.success,
 			`'${blog.title}' by '${blog.author}' added.`
@@ -62,15 +63,13 @@ const App = () => {
 		}
 	}, []);
 
-	const handleLogin = async (e) => {
-		e.preventDefault();
+	const handleLogin = async (username, password) => {
 		try {
 			const user = await loginService.login({ username, password });
 			localStorage.setItem('loggedInBlogUser', JSON.stringify(user));
 			blogService.setToken(user.token);
 			setUser(user);
-			setUsername('');
-			setPassword('');
+
 			displayNotification({
 				type: notificationTypes.success,
 				message: 'Successfully logged in',
@@ -93,13 +92,7 @@ const App = () => {
 			)}
 			{!user && (
 				<Togglable buttonText="Login">
-					<LoginForm
-						username={username}
-						setUsername={setUsername}
-						password={password}
-						setPassword={setPassword}
-						handleSubmit={handleLogin}
-					/>
+					<LoginForm handleLogin={handleLogin} />
 				</Togglable>
 			)}
 			{user && (

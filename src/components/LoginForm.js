@@ -1,12 +1,16 @@
-const LoginForm = ({
-	username,
-	password,
-	setUsername,
-	setPassword,
-	handleSubmit,
-}) => {
+import React from 'react';
+
+const LoginForm = ({ handleLogin }) => {
+	const [username, setUsername] = React.useState('');
+	const [password, setPassword] = React.useState('');
+
+	const login = (e) => {
+		e.preventDefault();
+		handleLogin(username, password);
+	};
+
 	return (
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={login}>
 			<fieldset>
 				<label htmlFor="username">Username</label>
 				<input
