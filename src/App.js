@@ -29,6 +29,7 @@ const App = () => {
 
 	const addBlog = async (blog) => {
 		newBlogFormRef.current.toggleVisibility();
+		blog.likes = 0;
 		setBlog(blog);
 		blogService.setToken(user.token);
 		const newBlog = await blogService.create(blog);

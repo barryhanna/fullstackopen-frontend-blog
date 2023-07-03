@@ -39,6 +39,14 @@ const Blog = ({ blog, setBlogs, user }) => {
 		});
 	};
 
+	const handleRemove = async (id) => {
+		if (window.confirm(`Delete ${blog.title} by ${blog.author}?`)) {
+			blogService.setToken(user.token);
+			await blogService.delete(id);
+			setBlogs((prevBlogs) => prevBlogs.filter((b) => b.id !== id));
+		}
+	};
+
 	const [showFullDetails, setShowFullDetails] = React.useState(false);
 
 	return (
@@ -61,6 +69,15 @@ const Blog = ({ blog, setBlogs, user }) => {
 						<button onClick={incrementLikes}>like</button>
 					</p>
 					<p>{blog?.user?.name}</p>
+					<button
+						style={{
+							color: 'white',
+							background: 'rgba(252, 61, 112, 1.00)',
+						}}
+						onClick={() => handleRemove(blog.id)}
+					>
+						remove
+					</button>
 				</>
 			)}
 		</div>

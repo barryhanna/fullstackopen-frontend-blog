@@ -33,9 +33,25 @@ const patch = (id, newObject) => {
 	return request.then((response) => response.data);
 };
 
+const handleDelete = async (id) => {
+	const config = {
+		headers: { Authorization: token },
+	};
+	await axios
+		.delete(`${baseUrl}/${id}`, config)
+		.then((res) => console.log(res));
+};
+
 const setToken = (newToken) => {
 	token = `Bearer ${newToken}`;
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, update, patch, setToken };
+export default {
+	getAll,
+	create,
+	update,
+	patch,
+	setToken,
+	delete: handleDelete,
+};
