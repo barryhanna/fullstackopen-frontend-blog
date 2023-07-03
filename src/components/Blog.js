@@ -2,22 +2,33 @@ import React from 'react';
 
 const Blog = ({ blog }) => {
 	const blogStyle = {
-		paddingTop: 10,
-		paddingLeft: 2,
-		border: 'solid',
+		padding: 10,
+		paddingLeft: 16,
+		borderRadius: 5,
 		borderWidth: 1,
-		marginBottom: 5,
+		marginBottom: 8,
+		boxShadow: '0 2px 4px rgba(0,0,0,.2)',
+	};
+
+	const viewButtonStyle = {
+		display: 'inline-block',
+		marginLeft: 'auto',
 	};
 
 	const [showFullDetails, setShowFullDetails] = React.useState(false);
 
 	return (
 		<div style={blogStyle}>
-			{/* <pre>{JSON.stringify(blog, null, 2)}</pre> */}
-			{blog.title} {blog.author}{' '}
-			<button onClick={() => setShowFullDetails(!showFullDetails)}>
-				{showFullDetails ? 'hide' : 'view'}
-			</button>
+			<div style={{ display: 'flex', alignItems: 'center' }}>
+				{/* <pre>{JSON.stringify(blog, null, 2)}</pre> */}
+				{blog.title} {blog.author}{' '}
+				<button
+					style={viewButtonStyle}
+					onClick={() => setShowFullDetails(!showFullDetails)}
+				>
+					{showFullDetails ? 'hide' : 'view'}
+				</button>
+			</div>
 			{showFullDetails && (
 				<>
 					<p>{blog.url}</p>

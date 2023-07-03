@@ -28,16 +28,18 @@ const App = () => {
 	});
 
 	const addBlog = async (blog) => {
+		newBlogFormRef.current.toggleVisibility();
 		setBlog(blog);
 		blogService.setToken(user.token);
 		const newBlog = await blogService.create(blog);
+		console.log('NEW BLOG', newBlog);
 		blog.id = newBlog.id;
+		blog.user = { name: newBlog.user.name };
 		setBlogs([...blogs, blog]);
 		displayNotification(
 			notificationTypes.success,
 			`'${blog.title}' by '${blog.author}' added.`
 		);
-		newBlogFormRef.current.toggleVisibility();
 	};
 
 	const displayNotification = (type, message) => {
