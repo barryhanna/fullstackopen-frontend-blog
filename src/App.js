@@ -32,7 +32,7 @@ const App = () => {
 		setBlog(blog);
 		blogService.setToken(user.token);
 		const newBlog = await blogService.create(blog);
-		console.log('NEW BLOG', newBlog);
+		// console.log('NEW BLOG', newBlog);
 		blog.id = newBlog.id;
 		blog.user = { name: newBlog.user.name };
 		setBlogs([...blogs, blog]);
@@ -119,7 +119,12 @@ const App = () => {
 				<>
 					<h2>Blogs</h2>
 					{blogs.map((blog) => (
-						<Blog key={blog.id} blog={blog} />
+						<Blog
+							key={blog.id}
+							blog={blog}
+							user={user}
+							setBlogs={setBlogs}
+						/>
 					))}
 				</>
 			)}

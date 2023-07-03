@@ -18,7 +18,18 @@ const create = async (newObject) => {
 };
 
 const update = (id, newObject) => {
-	const request = axios.put(`${baseUrl}/${id}`, newObject);
+	const config = {
+		headers: { Authorization: token },
+	};
+	const request = axios.put(`${baseUrl}/${id}`, newObject, config);
+	return request.then((response) => response.data);
+};
+
+const patch = (id, newObject) => {
+	const config = {
+		headers: { Authorization: token },
+	};
+	const request = axios.patch(`${baseUrl}/${id}`, newObject, config);
 	return request.then((response) => response.data);
 };
 
@@ -27,4 +38,4 @@ const setToken = (newToken) => {
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, update, setToken };
+export default { getAll, create, update, patch, setToken };

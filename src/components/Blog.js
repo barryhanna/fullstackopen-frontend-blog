@@ -1,6 +1,7 @@
 import React from 'react';
+import blogService from '../services/blogs';
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, setBlogs, user }) => {
 	const blogStyle = {
 		padding: 10,
 		paddingLeft: 16,
@@ -13,6 +14,29 @@ const Blog = ({ blog }) => {
 	const viewButtonStyle = {
 		display: 'inline-block',
 		marginLeft: 'auto',
+	};
+
+	const incrementLikes = async () => {
+		blogService.setToken(user.token);
+		const response = await blogService.patch(blog.id, {
+			...blog,
+			likes: blog.likes + 1,
+		});
+		// console.log('SERVER RESPONSE', response);
+		blog.likes = response.likes;
+
+		setBlogs((prevBlogs) => {
+			const updatedBlog = prevBlogs.filter(
+				(b) => b.id === blog.id
+			)[0];
+			const index = prevBlogs.findIndex((b) => b.id === blog.id);
+
+			return [
+				...prevBlogs.slice(0, index),
+				updatedBlog,
+				...prevBlogs.slice(index + 1),
+			];
+		});
 	};
 
 	const [showFullDetails, setShowFullDetails] = React.useState(false);
@@ -33,7 +57,8 @@ const Blog = ({ blog }) => {
 				<>
 					<p>{blog.url}</p>
 					<p>
-						{blog.likes} <button>like</button>
+						{blog.likes}{' '}
+						<button onClick={incrementLikes}>like</button>
 					</p>
 					<p>{blog?.user?.name}</p>
 				</>
