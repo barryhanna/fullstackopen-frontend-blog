@@ -1,5 +1,6 @@
 import React from 'react';
 import blogService from '../services/blogs';
+import PropTypes from 'prop-types';
 
 const Blog = ({ blog, setBlogs, user }) => {
 	const blogStyle = {
@@ -82,6 +83,12 @@ const Blog = ({ blog, setBlogs, user }) => {
 			)}
 		</div>
 	);
+};
+
+Blog.propTypes = {
+	blog: PropTypes.object.isRequired,
+	setBlogs: PropTypes.func.isRequired,
+	user: PropTypes.object.isRequired,
 };
 
 export default Blog;
