@@ -54,7 +54,10 @@ const Blog = ({ blog, setBlogs, user }) => {
 		<div style={blogStyle}>
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				{/* <pre>{JSON.stringify(blog, null, 2)}</pre> */}
-				{blog.title} {blog.author}{' '}
+				<p>
+					<span className="blogTitle">{blog.title}</span>{' '}
+					<span className="blogAuthor">{blog.author}</span>
+				</p>
 				<button
 					style={viewButtonStyle}
 					onClick={() => setShowFullDetails(!showFullDetails)}
