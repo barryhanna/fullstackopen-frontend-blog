@@ -16,11 +16,11 @@ test('blog renders the blog title and author, but not url and likes', async () =
 		id: '48753r984498ry439y98t87',
 	};
 
-	const setBlogs = jest.fn();
+	const setBlogsMock = jest.fn();
 
-	render(<Blog blog={blog} setBlogs={setBlogs} user={user} />);
+	render(<Blog blog={blog} setBlogs={setBlogsMock} user={user} />);
 
-	screen.debug();
+	// screen.debug();
 
 	const title = screen.getByText('Test 1');
 	const author = screen.getByText('Tester');
@@ -45,11 +45,11 @@ test('likes and url are shown when show details button is clicked', async () => 
 		id: '48753r984498ry439y98t87',
 	};
 
-	const setBlogs = jest.fn();
+	const setBlogsMock = jest.fn();
 	const userClick = userEvent.setup();
 
 	const { container } = render(
-		<Blog blog={blog} setBlogs={setBlogs} user={user} />
+		<Blog blog={blog} setBlogs={setBlogsMock} user={user} />
 	);
 	const button = container.querySelector('.showFullDetails');
 
@@ -60,4 +60,34 @@ test('likes and url are shown when show details button is clicked', async () => 
 
 	expect(likes).toBeDefined();
 	expect(url).toBeDefined();
+});
+
+test('ensure the like button is clicked twice', async () => {
+	const blog = {
+		title: 'Test 1',
+		author: 'Tester',
+		likes: 0,
+		url: 'http://tester.com',
+	};
+	const user = {
+		name: 'Tom',
+		id: '48753r984498ry439y98t87',
+	};
+
+	const setBlogsMock = jest.fn();
+	const userClick = userEvent.setup();
+
+	const { container } = render(
+		<Blog blog={blog} setBlogs={setBlogsMock} user={user} />
+	);
+
+	const button = container.querySelector('.showFullDetails');
+	const likeButton = container.querySelector('.btnLike');
+
+	await userClick.click(button);
+
+	await userClick.click(likeButton);
+	await userClick.click(likeButton);
+
+	expect(setBlogsMock.mock.calls).toHaveLength(2);
 });
