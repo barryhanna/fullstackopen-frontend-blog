@@ -59,6 +59,7 @@ const Blog = ({ blog, setBlogs, user }) => {
 					<span className="blogAuthor">{blog.author}</span>
 				</p>
 				<button
+					className="showFullDetails"
 					style={viewButtonStyle}
 					onClick={() => setShowFullDetails(!showFullDetails)}
 				>
@@ -67,8 +68,8 @@ const Blog = ({ blog, setBlogs, user }) => {
 			</div>
 			{showFullDetails && (
 				<>
-					<p>{blog.url}</p>
-					<p>
+					<p className="url">{blog.url}</p>
+					<p className="likes">
 						{blog.likes}{' '}
 						<button onClick={incrementLikes}>like</button>
 					</p>
