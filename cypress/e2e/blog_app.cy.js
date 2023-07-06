@@ -66,5 +66,16 @@ describe('Blog app', () => {
 			cy.contains('like').click();
 			cy.get('.likes').contains('1');
 		});
+
+		it('A user can delete a blog of theirs', function () {
+			cy.addBlog({
+				title: 'Test Blog',
+				author: 'Test Blog Author',
+				url: 'http://localhost',
+			});
+			cy.contains('view').click();
+			cy.contains('remove').click();
+			cy.contains('Test Blog').should('not.exist');
+		});
 	});
 });
