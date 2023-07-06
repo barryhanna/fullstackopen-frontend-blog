@@ -51,7 +51,7 @@ const Blog = ({ blog, setBlogs, user }) => {
 	const [showFullDetails, setShowFullDetails] = React.useState(false);
 
 	return (
-		<div style={blogStyle}>
+		<div style={blogStyle} className="blog">
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				{/* <pre>{JSON.stringify(blog, null, 2)}</pre> */}
 				<p>

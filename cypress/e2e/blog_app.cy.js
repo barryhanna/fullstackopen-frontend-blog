@@ -100,5 +100,27 @@ describe('Blog app', () => {
 			cy.contains('view').click();
 			cy.contains('remove').should('not.exist');
 		});
+
+		it('blogs are ordered according to likes with the blog with the most likes being first', function () {
+			cy.addBlog({
+				title: 'Test Blog',
+				author: 'Test Blog Author',
+				url: 'http://localhost',
+			});
+			cy.contains('view').click();
+			cy.contains('like').click();
+
+			cy.addBlog({
+				title: 'No joy',
+				author: 'Unpopular Blog Author',
+				url: 'http://localhost',
+			});
+
+			cy.contains('view').click();
+			cy.contains('view').click();
+
+			cy.get('.blog').eq(0).should('contain', 'Test Blog');
+			cy.get('.blog').eq(1).should('contain', 'No joy');
+		});
 	});
 });
