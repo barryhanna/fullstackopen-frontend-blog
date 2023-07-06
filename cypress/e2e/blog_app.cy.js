@@ -45,12 +45,6 @@ describe('Blog app', () => {
 		});
 
 		it('A blog can be created', function () {
-			// cy.request('POST', 'http://localhost:3003/api/blogs', {
-			// 	title: 'Test Blog',
-			// 	author: 'Test Blog Author',
-			// 	url: 'http://localhost',
-			// });
-			// cy.contains('Test Blog');
 			cy.visit('http://localhost:3000');
 			cy.contains('Add New Blog').click();
 			cy.get('#title').type('Test Blog');
@@ -58,6 +52,19 @@ describe('Blog app', () => {
 			cy.get('#url').type('http://localhost');
 			cy.contains('Create').click();
 			cy.contains('Test Blog');
+		});
+
+		it('A user can like a blog', function () {
+			cy.visit('http://localhost:3000');
+			cy.contains('Add New Blog').click();
+			cy.get('#title').type('Test Blog');
+			cy.get('#author').type('Test Blog Author');
+			cy.get('#url').type('http://localhost');
+			cy.contains('Create').click();
+			cy.contains('Test Blog');
+			cy.contains('view').click();
+			cy.contains('like').click();
+			cy.get('.likes').contains('1');
 		});
 	});
 });
