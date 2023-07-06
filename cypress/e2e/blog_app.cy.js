@@ -77,5 +77,28 @@ describe('Blog app', () => {
 			cy.contains('remove').click();
 			cy.contains('Test Blog').should('not.exist');
 		});
+
+		it('that only the creator can see the delete button of a blog', function () {
+			cy.addBlog({
+				title: 'Test Blog',
+				author: 'Test Blog Author',
+				url: 'http://localhost',
+			});
+
+			const user2 = {
+				name: 'BobBob',
+				username: 'bob',
+				password: 'bobbob',
+			};
+			cy.request('POST', 'http://localhost:3003/api/users/', user2);
+			cy.login({
+				username: user2.username,
+				password: user2.password,
+			});
+			cy.visit('http://localhost:3000');
+			cy.contains('bob is logged in.');
+			cy.contains('view').click();
+			cy.contains('remove').should('not.exist');
+		});
 	});
 });

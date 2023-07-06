@@ -76,15 +76,17 @@ const Blog = ({ blog, setBlogs, user }) => {
 						</button>
 					</p>
 					<p>{blog?.user?.name}</p>
-					<button
-						style={{
-							color: 'white',
-							background: 'rgba(252, 61, 112, 1.00)',
-						}}
-						onClick={() => handleRemove(blog.id)}
-					>
-						remove
-					</button>
+					{user.name === blog.user.name && (
+						<button
+							style={{
+								color: 'white',
+								background: 'rgba(252, 61, 112, 1.00)',
+							}}
+							onClick={() => handleRemove(blog.id)}
+						>
+							remove
+						</button>
+					)}
 				</>
 			)}
 		</div>
